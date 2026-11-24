@@ -1,0 +1,13 @@
+numpy
+pandas==2.2.3
+scikit-learn==1.8.0
+matplotlib
+joblib==1.5.3
+pyyaml
+pytest
+fastapi==0.128.2
+uvicorn==0.48.0
+httpx
+requests
+mlflow
+jupyter

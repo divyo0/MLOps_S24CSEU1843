@@ -1,0 +1,102 @@
+Cell 3
+Python  : 3.13.5
+Folder  : P07-serving
+  numpy          ok
+  pandas         ok
+  sklearn        ok
+  fastapi        ok
+  joblib         ok
+
+All good. You can carry on to Step 1.
+
+Cell 5
+dataset found   -> ../data/delivery_times.csv
+
+Cell 8
+model saved, MAE 1.92 minutes
+
+Cell 10
+accepted: distance_km=5.0 prep_time_min=20 traffic_level=2 rain=0
+
+rejected, and here is why:
+1 validation error for Order
+traffic_level
+  Input should be less than or equal to 3 [type=less_than_equal, input_value=9, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.13/v/less_than_equal
+
+Cell 13
+wrote work/app.py (1346 characters)
+
+Cell 15
+service loaded: Delivery Time Predictor version 1.0.0
+
+Cell 17
+status code: 200
+body       : {'status': 'ok', 'model_loaded': True}
+
+Cell 20
+status code: 200
+body       : {'delivery_min': 43.0, 'model_version': '1.0.0'}
+
+Predicted: 43.0 minutes
+
+Cell 23
+traffic level 9 (only 1-3 exist)     -> 422
+negative distance                    -> 422
+prep_time_min missing altogether     -> 422
+
+Detail of the last rejection:
+Field required
+
+Cell 26
+service : Delivery Time Predictor 1.0.0
+endpoints:
+   GET   /health
+   POST  /predict
+
+Fields /predict requires:
+   distance_km      number   {'maximum': 50.0, 'exclusiveMinimum': 0.0}
+   prep_time_min    integer  {'maximum': 120.0, 'minimum': 0.0}
+   traffic_level    integer  {'maximum': 3.0, 'minimum': 1.0}
+   rain             integer  {'maximum': 1.0, 'minimum': 0.0}
+
+Cell 28
+Run these two lines in a terminal:
+
+  cd /mnt/data/MLOps_S24CSEU1843/P07-serving/work
+  python -m uvicorn app:app --reload --port 8000
+
+Then open http://127.0.0.1:8000/docs in your browser.
+
+What you will see first: a page titled 'Delivery Time
+Predictor' with two rows, GET /health and POST /predict.
+Click POST /predict, then the 'Try it out' button, edit the
+example order, and press Execute. The answer appears below
+under 'Response body'.
+
+Cell 32
+{'features': ['distance_km', 'prep_time_min', 'traffic_level', 'rain'], 'model_type': 'LinearRegression', 'version': '1.0.0'}
+
+Cell 34
+dry: 29.5  wet: 35.0
+
+Cell 36
+30 km -> 422    10 km -> 200
+
+Cell 38
+==================================================================
+SELF-CHECK   Practical 07 --- Putting the Model Behind an Address
+==================================================================
+  [PASS]  T1 | GET /model-info answers with 200
+  [PASS]  T1 | it returns the three required keys
+  [PASS]  T1 | the values are correct
+  [PASS]  T2 | both are numbers in a plausible range
+  [PASS]  T2 | rain makes the same order take longer
+  [PASS]  T2 | the values match what the service returns
+  [PASS]  T3 | a 30 km order is now rejected with 422
+  [PASS]  T3 | a 10 km order is still accepted with 200
+  [PASS]  T3 | the new limit is really in the schema, not just in the test
+------------------------------------------------------------------
+  9 of 9 checks passed
+==================================================================
+Well done. Save the notebook and submit it.

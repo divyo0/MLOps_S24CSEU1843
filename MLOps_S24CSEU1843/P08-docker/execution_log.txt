@@ -1,0 +1,132 @@
+Cell 3
+Python  : 3.13.5
+Folder  : P08-docker
+  numpy          ok
+  pandas         ok
+  sklearn        ok
+  fastapi        ok
+  joblib         ok
+  requests       ok
+
+All good. You can carry on to Step 1.
+
+Cell 5
+dataset found   -> ../data/delivery_times.csv
+
+Cell 8
+Docker is NOT installed on this machine.
+Install Docker Desktop, then restart Jupyter.
+
+DOCKER_OK = False
+
+Cell 11
+SKIPPED (no Docker): docker --version
+
+Cell 13
+  .dockerignore               65 bytes
+  .dockerignore.mine          44 bytes
+  Dockerfile                 370 bytes
+  app.py                     911 bytes
+  model.joblib               921 bytes
+  requirements.txt            81 bytes
+
+Cell 16
+# The delivery-time prediction service.
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Libraries first: this layer is cached and rarely changes.
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Code and model last: these change often.
+COPY app.py .
+COPY model.joblib .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+Cell 18
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.ipynb
+.venv/
+.git/
+*.db
+
+
+Cell 20
+SKIPPED (no Docker): docker build -t delivery-api:1.0 work
+
+Cell 23
+SKIPPED (no Docker): docker images delivery-api:1.0
+
+Cell 26
+SKIPPED (no Docker): docker rm -f delivery-lab
+SKIPPED (no Docker): docker run -d --rm --name delivery-lab -p 8010:8000 delivery-api:1.0
+
+Cell 28
+SKIPPED (no Docker): nothing is listening on port 8010
+
+Cell 31
+SKIPPED (no Docker): docker logs --tail 15 delivery-lab
+SKIPPED (no Docker): docker stop delivery-lab
+
+Containers still running:
+SKIPPED (no Docker): docker ps
+
+Cell 35
+['__pycache__/', '*.pyc', '.venv/', '.git/', 'tests/', '*.md']
+
+Cell 37
+THE BROKEN ONE:
+FROM python:3.12-slim
+COPY . .
+RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 8000
+CMD ["uvicorn", "app:app", "--port", "8000"]
+
+YOURS:
+# The delivery-time prediction service.
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Libraries first: this layer is cached and rarely changes.
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Code and model last: these change often.
+COPY app.py .
+COPY model.joblib .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+Cell 39
+SKIPPED: Docker Desktop must be running.
+T3_minutes = None
+
+Cell 41
+==================================================================
+SELF-CHECK   Practical 08 --- Packing the Service into a Container
+==================================================================
+  [PASS]  T1 | the file exists
+  [PASS]  T1 | it contains all six patterns, one per line
+  [PASS]  T1 | T1_patterns lists the same six
+  [PASS]  T2 | the fixed Dockerfile sets a WORKDIR
+  [PASS]  T2 | requirements are installed before the code is copied
+  [PASS]  T2 | uvicorn is told to listen on 0.0.0.0
+  [PASS]  T2 | it still starts from a slim python base and exposes a port
+  [PASS]  T3 | the second Dockerfile was written
+  [FAIL]  T3 | the container returned a sensible prediction
+------------------------------------------------------------------
+  8 of 9 checks passed
+==================================================================
+Read the FAIL lines above, fix those tasks, run this cell again.

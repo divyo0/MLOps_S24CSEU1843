@@ -1,0 +1,214 @@
+Cell 3
+Python  : 3.13.5
+Folder  : P05-config-tests
+  numpy          ok
+  pandas         ok
+  sklearn        ok
+  yaml           ok
+  pytest         ok
+  matplotlib     ok
+
+All good. You can carry on to Step 1.
+
+Cell 5
+dataset found   -> ../data/delivery_times.csv
+
+Cell 8
+MAE 1.92
+
+Cell 11
+# Settings for the delivery-time model.
+# Change values here, never in the code.
+
+data:
+  path: ../data/delivery_times.csv
+  features:
+    - distance_km
+    - prep_time_min
+    - traffic_level
+    - rain
+  target: delivery_min
+
+split:
+  test_size: 0.2
+  seed: 42
+
+model:
+  name: linear_regression
+
+
+Cell 13
+<class 'dict'>
+
+features : ['distance_km', 'prep_time_min', 'traffic_level', 'rain']
+test size: 0.2
+seed     : 42
+
+Cell 16
+MAE 1.92 minutes
+
+Cell 19
+test_size 0.2 -> MAE 1.92
+test_size 0.3 -> MAE 2.01
+test_size 0.4 -> MAE 2.04
+
+Cell 21
+Chart cell requires Jupyter IPython.
+
+Cell 24
+AssertionError: arithmetic is broken
+
+Cell 27
+wrote work/orders.py
+
+Cell 29
+wrote work/test_orders.py
+
+Cell 31
+============================= test session starts ==============================
+platform linux -- Python 3.13.5, pytest-9.0.2, pluggy-1.6.0 -- /opt/pyvenv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.5', 'Platform': 'Linux-6.18.57-x86_64-with-glibc2.41', 'Packages': {'pytest': '9.0.2', 'pluggy': '1.6.0'}, 'Plugins': {'anyio': '4.13.0', 'ddtrace': '4.4.0', 'Faker': '40.1.2', 'asyncio': '1.3.0', 'cov': '7.0.0', 'json-report': '1.5.0', 'metadata': '3.1.1'}, 'PLATFORM': 'linux/amd64', 'CI': 'true'}
+rootdir: /mnt/data/MLOps_S24CSEU1843/P05-config-tests/work
+plugins: anyio-4.13.0, ddtrace-4.4.0, Faker-40.1.2, asyncio-1.3.0, cov-7.0.0, json-report-1.5.0, metadata-3.1.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 9 items
+
+test_model.py::test_rain_never_makes_delivery_faster PASSED              [ 11%]
+test_model.py::test_further_is_never_faster PASSED                       [ 22%]
+test_model.py::test_error_is_better_than_guessing PASSED                 [ 33%]
+test_orders.py::test_minutes_per_km_simple PASSED                        [ 44%]
+test_orders.py::test_minutes_per_km_rejects_zero_distance PASSED         [ 55%]
+test_orders.py::test_good_order_is_accepted PASSED                       [ 66%]
+test_orders.py::test_bad_traffic_level_is_rejected PASSED                [ 77%]
+test_speed.py::test_slow_delivery PASSED                                 [ 88%]
+test_speed.py::test_negative_distance_raises PASSED                      [100%]
+
+============================== 9 passed in 0.07s ===============================
+
+exit code: 0 (0 means every test passed)
+
+Cell 34
+===========================
+platform linux -- Python 3.13.5, pytest-9.0.2, pluggy-1.6.0 -- /opt/pyvenv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.5', 'Platform': 'Linux-6.18.57-x86_64-with-glibc2.41', 'Packages': {'pytest': '9.0.2', 'pluggy': '1.6.0'}, 'Plugins': {'anyio': '4.13.0', 'ddtrace': '4.4.0', 'Faker': '40.1.2', 'asyncio': '1.3.0', 'cov': '7.0.0', 'json-report': '1.5.0', 'metadata': '3.1.1'}, 'PLATFORM': 'linux/amd64', 'CI': 'true'}
+rootdir: /mnt/data/MLOps_S24CSEU1843/P05-config-tests/work
+plugins: anyio-4.13.0, ddtrace-4.4.0, Faker-40.1.2, asyncio-1.3.0, cov-7.0.0, json-report-1.5.0, metadata-3.1.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 9 items
+
+test_model.py::test_rain_never_makes_delivery_faster PASSED              [ 11%]
+test_model.py::test_further_is_never_faster PASSED                       [ 22%]
+test_model.py::test_error_is_better_than_guessing PASSED                 [ 33%]
+test_orders.py::test_minutes_per_km_simple FAILED                        [ 44%]
+test_orders.py::test_minutes_per_km_rejects_zero_distance PASSED         [ 55%]
+test_orders.py::test_good_order_is_accepted PASSED                       [ 66%]
+test_orders.py::test_bad_traffic_level_is_rejected PASSED                [ 77%]
+test_speed.py::test_slow_delivery FAILED                                 [ 88%]
+test_speed.py::test_negative_distance_raises PASSED                      [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_minutes_per_km_simple __________________________
+
+    def test_minutes_per_km_simple():
+>       assert minutes_per_km(30, 10) == 3.0
+E       assert 300 == 3.0
+E        +  where 300 = minutes_per_km(30, 10)
+
+test_orders.py:9: AssertionError
+______________________________ test_slow_delivery ______________________________
+
+    def test_slow_delivery():
+>       assert minutes_per_km(60, 6) == 10.0
+E       assert 360 == 10.0
+E        +  where 360 = minutes_per_km(60, 6)
+
+test_speed.py:9: AssertionError
+=========================== short test summary info ============================
+FAILED test_orders.py::test_minutes_per_km_simple - assert 300 == 3.0
+ +  where 300 = minutes_per_km(30, 10)
+FAILED test_speed.py::test_slow_delivery - assert 360 == 10.0
+ +  where 360 = minutes_per_km(60, 6)
+========================= 2 failed, 7 passed in 0.08s ==========================
+
+exit code: 1 (0 means every test passed)
+
+module repaired
+
+Cell 37
+Chart cell requires Jupyter IPython.
+
+Cell 40
+wrote work/test_model.py
+
+Cell 43
+============================= test session starts ==============================
+platform linux -- Python 3.13.5, pytest-9.0.2, pluggy-1.6.0
+rootdir: /mnt/data/MLOps_S24CSEU1843/P05-config-tests/work
+plugins: anyio-4.13.0, ddtrace-4.4.0, Faker-40.1.2, asyncio-1.3.0, cov-7.0.0, json-report-1.5.0, metadata-3.1.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 9 items
+
+test_model.py ...                                                        [ 33%]
+test_orders.py ....                                                      [ 77%]
+test_speed.py ..                                                         [100%]
+
+============================== 9 passed in 0.04s ===============================
+
+exit code: 0 (0 means every test passed)
+
+Cell 46
+Chart cell requires Jupyter IPython.
+
+Cell 50
+MAE on the first 300 orders: 2.1781751077589737
+
+Cell 52
+.........                                                                [100%]
+9 passed in 0.05s
+ 
+
+Cell 54
+============================= test session starts ==============================
+platform linux -- Python 3.13.5, pytest-9.0.2, pluggy-1.6.0 -- /opt/pyvenv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.5', 'Platform': 'Linux-6.18.57-x86_64-with-glibc2.41', 'Packages': {'pytest': '9.0.2', 'pluggy': '1.6.0'}, 'Plugins': {'anyio': '4.13.0', 'ddtrace': '4.4.0', 'Faker': '40.1.2', 'asyncio': '1.3.0', 'cov': '7.0.0', 'json-report': '1.5.0', 'metadata': '3.1.1'}, 'PLATFORM': 'linux/amd64', 'CI': 'true'}
+rootdir: /mnt/data/MLOps_S24CSEU1843/P05-config-tests/work
+plugins: anyio-4.13.0, ddtrace-4.4.0, Faker-40.1.2, asyncio-1.3.0, cov-7.0.0, json-report-1.5.0, metadata-3.1.1
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 10 items
+
+test_model.py::test_rain_never_makes_delivery_faster PASSED              [ 10%]
+test_model.py::test_further_is_never_faster PASSED                       [ 20%]
+test_model.py::test_error_is_better_than_guessing PASSED                 [ 30%]
+test_model.py::test_heavier_traffic_is_never_faster PASSED               [ 40%]
+test_orders.py::test_minutes_per_km_simple PASSED                        [ 50%]
+test_orders.py::test_minutes_per_km_rejects_zero_distance PASSED         [ 60%]
+test_orders.py::test_good_order_is_accepted PASSED                       [ 70%]
+test_orders.py::test_bad_traffic_level_is_rejected PASSED                [ 80%]
+test_speed.py::test_slow_delivery PASSED                                 [ 90%]
+test_speed.py::test_negative_distance_raises PASSED                      [100%]
+
+============================== 10 passed in 0.04s ==============================
+ 
+
+Cell 56
+==================================================================
+SELF-CHECK   Practical 05 --- Settings in a File, Bugs Caught by a Robot
+==================================================================
+  [PASS]  T1 | config has a training section with max_rows 300
+  [PASS]  T1 | T1_mae is a sensible error in minutes
+  [PASS]  T1 | train_limited really used only 300 rows
+  [PASS]  T2 | test_speed.py exists and names both tests
+  [PASS]  T2 | both tests really assert something
+  [PASS]  T2 | the whole suite passes (exit code 0)
+  [PASS]  T2 | at least 9 tests were collected
+  [PASS]  T3 | the new test asserts something and uses the fixture
+  [PASS]  T3 | the whole suite still passes
+------------------------------------------------------------------
+  9 of 9 checks passed
+==================================================================
+Well done. Save the notebook and submit it.
+
+Cell 58
